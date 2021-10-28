@@ -48,8 +48,8 @@ while auxDate < endDate:
     df.show(truncate=False)
     auxDate = auxDate + timedelta(days=1)
     # Saving the data to BigQuery
-#table = f"test-330322:test.sf_prueba"
-#table_df = (spark.read.format('bigquery').option('table', table).load())
+table = f"test-330322.test.sf_prueba"
+table_df = (spark.read.format('bigquery').option('table', table).load())
     
 
 
