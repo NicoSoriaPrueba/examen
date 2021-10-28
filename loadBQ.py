@@ -10,13 +10,14 @@ from pyspark.sql.functions import *
 from google.cloud import bigquery
 
 
-# In[22]:
+# In[25]:
 
 
-dataframe = spark.read.parquet("gs://ds1-dataproc/archivos/out/devices.parquet/year=2021/month=1/day=1")
+# Create a SparkSession under the name "reddit". Viewable via the Spark UI
+spark = SparkSession.builder.appName("testSession").getOrCreate()
 
 
-# In[23]:
+# In[26]:
 
 
 startDate = auxDate = datetime.strptime('2021-01-01', '%Y-%m-%d').date()
@@ -24,7 +25,7 @@ endDate= datetime.strptime('2021-01-02', '%Y-%m-%d').date()
 print(startDate.year)
 
 
-# In[24]:
+# In[27]:
 
 
 while auxDate < endDate:
