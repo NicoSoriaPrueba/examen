@@ -49,7 +49,7 @@ while auxDate <= endDate:
         idMax=0
     df = df.filter(df.id > idMax)
     print(df.show(truncate=False))
-    df.write.format('bigquery')     .option("temporaryGcsBucket","gs://ds1-dataproc/temp")       .save('test-opi-330322.test.Base')       .mode("append")
+    df.write.format('bigquery')     .option("temporaryGcsBucket","ds1-dataproc")       .save('test-opi-330322.test.Base')       .mode("append")
 
     auxDate = auxDate + timedelta(days=1)
     # Saving the data to BigQuery
