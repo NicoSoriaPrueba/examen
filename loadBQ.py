@@ -49,7 +49,7 @@ while auxDate <= endDate:
         idMax=0
     df = df.filter(df.id > idMax)
     print(df.show(truncate=False))
-    df.write.format('bigquery')       .option('table', 'test-opi-330322.test.sf_prueba')       .save()
+    df.write.format('bigquery')       .option('table', 'test-opi-330322.test.Base')       .save()       .mode("append")
 
     auxDate = auxDate + timedelta(days=1)
     # Saving the data to BigQuery
