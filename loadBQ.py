@@ -47,8 +47,8 @@ while auxDate <= endDate:
 
 
     auxDate = auxDate + timedelta(days=1)
-    # Saving the data to BigQuery
-    df.write.format('bigquery')     .option("temporaryGcsBucket","ds1-dataproc")       .save('test-opi-330322.test.Base')       .mode(SaveMode.Append)
+    df.write.format('bigquery')       .option('table', 'test-opi-330322.test.Base2')       .save()
+
     
 
 
