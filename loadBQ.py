@@ -1,55 +1,63 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[21]:
+# In[34]:
 
 
 from pyspark.sql import SparkSession, SQLContext, Row
 from datetime import datetime, timedelta
 from pyspark.sql.functions import *
-from google.cloud import bigquery
 
 
-# In[25]:
+# In[35]:
+
+
+def calcMaximo(df):
+    df.createOrReplaceTempView('df')
+    aux = spark.sql('SELECT MAX(id) as max from df').collect()[0]
+    return aux['max']
+    
+
+
+# In[38]:
 
 
 # Create a SparkSession under the name "reddit". Viewable via the Spark UI
 spark = SparkSession.builder.appName("testSession").getOrCreate()
 
 
-# In[26]:
+# In[40]:
 
 
 startDate = auxDate = datetime.strptime('2021-01-01', '%Y-%m-%d').date()
-endDate= datetime.strptime('2021-01-02', '%Y-%m-%d').date()
-print(startDate.year)
-
-
-# In[27]:
-
-
-while auxDate < endDate:
+endDate= datetime.strptime('2021-01-05', '%Y-%m-%d').date()
+idMax=0
+while auxDate <= endDate:
     year = auxDate.year
     month = auxDate.month
     day = auxDate.day
     #Datos para 3 dias antes
-    year3 = (auxDate - timedelta(days=3)).year
-    month3 = (auxDate - timedelta(days=3)).month
-    day3 = (auxDate - timedelta(days=3)).day
-    try:
-        df = spark.read.parquet("gs://ds1-dataproc/archivos/out/devices.parquet/year={0}/month={1}/day={2}".format(year,month,day))
-        df3 = spark.read.parquet("gs://ds1-dataproc/archivos/out/devices.parquet/year={0}/month={1}/day={2}".format(year3,month3,day3))
-        
-    except:
-        pass
-    # Cargas de Temporales
-    df.createOrReplaceTempView('df')
+    year1 = (auxDate - timedelta(days=1)).year
+    month1 = (auxDate - timedelta(days=1)).month
+    day1 = (auxDate - timedelta(days=1)).day
     
-    df.show(truncate=False)
+    df = spark.read.parquet("gs://ds1-dataproc/archivos/out/devices.parquet/year={0}/month={1}/day={2}".format(year,month,day))
+    try:
+        df1 = spark.read.parquet("gs://ds1-dataproc/archivos/out/devices.parquet/year={0}/month={1}/day={2}".format(year1,month1,day1)) 
+        idMax = calcMaximo(df1)
+    except:
+        idMax=0
+    df = df.filter(df.id > idMax)
+    print(df.show(truncate=False))
+    df.write.format('bigquery')       .option('table', 'test-opi-330322.test.sf_prueba')       .save()
+
     auxDate = auxDate + timedelta(days=1)
     # Saving the data to BigQuery
-table = "test-opi-330322.test.sf_prueba"
-table_df = (spark.read.format('bigquery').option('table', table).load())
-table_df.show(truncate=False)
     
+
+
+# In[ ]:
+
+
+
 
