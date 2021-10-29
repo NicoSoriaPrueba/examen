@@ -30,7 +30,7 @@ PYSPARK_URI='~/examen/ETL/loadBQ.py'
 with models.DAG(
         'composer_sample_quickstart',
         # Continue to run DAG once per day
-        schedule_interval=datetime.timedelta(days=1),
+        schedule_interval="0 7 * * *",
         default_args=default_dag_args) as dag:
     # Create a Cloud Dataproc cluster.
     create_dataproc_cluster = dataproc_operator.DataprocClusterCreateOperator(
