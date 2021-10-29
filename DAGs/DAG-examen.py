@@ -9,7 +9,7 @@ default_args = {
     'depends_on_past': False   
 }
 
-CLUSTER_NAME = 'airflow-examen'
+CLUSTER_NAME = 'airflow-opi'
 REGION='us-central1'
 PROJECT_ID='test-opi-330322'
 PYSPARK_URI='~/examen/ETL/loadBQ.py'
@@ -19,12 +19,12 @@ CLUSTER_CONFIG = {
     "master_config": {
         "num_instances": 1,
         "machine_type_uri": "n1-standard-2",
-        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 512},
+        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
     },
     "worker_config": {
         "num_instances": 3,
         "machine_type_uri": "n1-standard-2",
-        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 512},
+        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 50},
     }
 }
 
