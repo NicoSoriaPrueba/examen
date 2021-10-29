@@ -9,6 +9,12 @@ default_args = {
     'depends_on_past': False   
 }
 
+CLUSTER_NAME = 'airflow-examen'
+REGION='us-central1'
+PROJECT_ID='test-opi-330322'
+PYSPARK_URI='~/examen/ETL/loadBQ.py'
+
+
 CLUSTER_CONFIG = {
     "master_config": {
         "num_instances": 1,
@@ -21,7 +27,6 @@ CLUSTER_CONFIG = {
         "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 512},
     }
 }
-
 with DAG(
     'dataproc-examen',
     default_args=default_args,
@@ -32,10 +37,17 @@ with DAG(
 
     create_cluster = DataprocCreateClusterOperator(
         task_id="create_cluster",
-        project_id='test-opi-330322',
+        project_id=PROJECT_ID,
         cluster_config=CLUSTER_CONFIG,
-        region='us-central1',
-        cluster_name='airflow-examen',
+        region=REGION,
+        cluster_name=CLUSTER_NAME,
     )
 
-    create_cluster
+    delete_cluster = DataprocDeleteClusterOperator(
+        task_id="delete_cluster", 
+        project_id=PROJECT_ID, 
+        cluster_name=CLUSTER_NAME, 
+        region=REGION
+    )
+
+    create_cluster >> delete_cluster
