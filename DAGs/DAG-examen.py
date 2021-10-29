@@ -12,7 +12,7 @@ default_args = {
 CLUSTER_NAME = 'airflow-opi'
 REGION='us-central1'
 PROJECT_ID='test-opi-330322'
-PYSPARK_URI='~/examen/ETL/loadBQ.py'
+PYSPARK_URI='gs://us-central1-compositor-opi-a72abed9-bucket/etl/DAG-examen.py'
 
 
 CLUSTER_CONFIG = {
