@@ -12,21 +12,23 @@ from pyspark.sql.functions import *
 # In[2]:
 
 
-# Create a SparkSession under the name "reddit". Viewable via the Spark UI
+# Creo la sesion de spark
 spark = SparkSession.builder.appName("testSession").getOrCreate()
 
 
 # In[11]:
 
-
+#Defino los dias que voy a correr el script
 startDate = auxDate = datetime.strptime('2021-01-01', '%Y-%m-%d').date()
-endDate= datetime.strptime('2021-01-01', '%Y-%m-%d').date()
+endDate= datetime.strptime('2021-01-05', '%Y-%m-%d').date()
 idMax=0
+
+#Tomo dia a dia para compararlo con dias anteriores y asi descartar registros duplicados
 while auxDate <= endDate:
     year = auxDate.year
     month = auxDate.month
     day = auxDate.day
-    #Datos para 3 dias antes
+    #Datos para 1 dia antes
     year1 = (auxDate - timedelta(days=1)).year
     month1 = (auxDate - timedelta(days=1)).month
     day1 = (auxDate - timedelta(days=1)).day
@@ -47,17 +49,8 @@ while auxDate <= endDate:
 
 
     auxDate = auxDate + timedelta(days=1)
-    #df.write.mode(SaveMode.Append).format('bigquery').option("temporaryGcsBucket","ds1-dataproc/temp").insertInto('test-opi-330322.test.Base2')
-      #.save('test-opi-330322.test.Base2')
+    
+    #cargo en Big Query
     df.write   .format("bigquery")     .mode("append")   .option("temporaryGcsBucket","ds1-dataproc/temp")   .save("test-opi-330322.test.Base3") 
     
-
-
-    
-
-
-# In[ ]:
-
-
-
 
